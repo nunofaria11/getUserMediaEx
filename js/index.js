@@ -22,6 +22,9 @@
 
         //video.srcObject = videoTracks;
         video.src = window.URL.createObjectURL(stream);
+        video.onloadedmetadata = function(e) {
+            video.play();
+        };
         window.stream = stream;
     }
 
