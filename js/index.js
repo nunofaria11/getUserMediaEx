@@ -1,24 +1,31 @@
-var constraints = {
-    audio: false,
-    video: true
-};
+(function(getUserMedia) {
 
-var video = document.querySelector('#videoEl');
-var error = document.querySelector('#errorEl');
+    navigator._getUserMedia = getUserMedia;
 
-navigator.mediaDevices.getUserMedia()
-    .then(function(stream) {
+    var constraints = {
+        audio: false,
+        video: true
+    };
+
+    var video = document.querySelector('#videoEl');
+    var error = document.querySelector('#errorEl');
+
+    function onStream(stream) {
+
         var videoTracks = stream.getVideoTracks();
         console.log('Get media:', constraints);
         console.log('Video device:', videoTracks[0].label);
         stream.onended = function() {
             console.log('Stream ended!');
         };
-
-        video.srcObject = videoTracks;
+        video.src = window.URL.createObjectURL(stream);
+        video.onloadedmetadata = function(e) {
+            video.play();
+        };
         window.stream = stream;
-    })
-    .catch(function(err) {
+    }
+
+    function onError(err) {
         switch (err.name) {
             case 'PermissionDeniedError':
                 errorMessage('Permissions denied!', err);
@@ -29,12 +36,19 @@ navigator.mediaDevices.getUserMedia()
             default:
                 errorMessage('An error occurred!');
         }
-    });
-
-
-function errorMessage(message, err) {
-    error.innerHTML += '<p>' + message + '</p>';
-    if (err) {
-        console.error('Error occurred:', err);
     }
-}
+
+    function errorMessage(message, err) {
+        error.innerHTML += '<p>' + message + '</p>';
+        if (err) {
+            console.error('Error occurred:', err);
+        }
+    }
+
+    if (navigator._getUserMedia) {
+        navigator._getUserMedia(constraints, onStream, onError);
+    } else {
+        errorMessage('getUserMedia API not available');
+    }
+    
+}(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia));
