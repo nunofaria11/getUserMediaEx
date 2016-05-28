@@ -31,7 +31,8 @@
                 errorMessage('An error occurred!');
         }
     }
-function errorMessage(message, err) {
+
+    function errorMessage(message, err) {
         error.innerHTML += '<p>' + message + '</p>';
         if (err) {
             console.error('Error occurred:', err);
@@ -40,10 +41,6 @@ function errorMessage(message, err) {
     if (getUserMedia) {
         getUserMedia(constraints, onStream, onError);
     } else {
-    	errorMessage('getUserMedia API not available');
+        errorMessage('getUserMedia API not available');
     }
-
-
-    
-
-})(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;);
+}(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia));
