@@ -1,8 +1,13 @@
 (function(getUserMedia) {
+
+        navigator._getUserMedia = getUserMedia;
+
     var constraints = {
         audio: false,
         video: true
     };
+
+
 
     var video = document.querySelector('#videoEl');
     var error = document.querySelector('#errorEl');
@@ -38,8 +43,8 @@
             console.error('Error occurred:', err);
         }
     }
-    if (getUserMedia) {
-        getUserMedia(constraints, onStream, onError);
+    if (navigator._getUserMedia) {
+        navigator._getUserMedia(constraints, onStream, onError);
     } else {
         errorMessage('getUserMedia API not available');
     }
