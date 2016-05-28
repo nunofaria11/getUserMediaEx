@@ -1,6 +1,6 @@
 (function(getUserMedia) {
 
-        navigator._getUserMedia = getUserMedia;
+    navigator._getUserMedia = getUserMedia;
 
     var constraints = {
         audio: false,
@@ -11,6 +11,10 @@
 
     var video = document.querySelector('#videoEl');
     var error = document.querySelector('#errorEl');
+
+    video.onloadedmetadata = function() {
+        video.play();
+    };
 
     function onStream(stream) {
         var videoTracks = stream.getVideoTracks();
