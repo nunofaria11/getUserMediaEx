@@ -11,7 +11,6 @@
     var error = document.querySelector('#errorEl');
 
     function onStream(stream) {
-
         var videoTracks = stream.getVideoTracks();
         console.log('Get media:', constraints);
         console.log('Video device:', videoTracks[0].label);
@@ -44,11 +43,9 @@
             console.error('Error occurred:', err);
         }
     }
-
     if (navigator._getUserMedia) {
         navigator._getUserMedia(constraints, onStream, onError);
     } else {
         errorMessage('getUserMedia API not available');
     }
-    
 }(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia));
