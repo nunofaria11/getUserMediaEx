@@ -12,10 +12,6 @@
     var video = document.querySelector('#videoEl');
     var error = document.querySelector('#errorEl');
 
-    video.onloadedmetadata = function() {
-        video.play();
-    };
-
     function onStream(stream) {
         var videoTracks = stream.getVideoTracks();
         console.log('Get media:', constraints);
@@ -24,7 +20,8 @@
             console.log('Stream ended!');
         };
 
-        video.srcObject = videoTracks;
+        //video.srcObject = videoTracks;
+        video.src = window.URL.createObjectURL(stream);
         window.stream = stream;
     }
 
