@@ -1,13 +1,13 @@
-var constraints = {
-    audio: false,
-    video: true
-};
+(function(getUserMedia) {
+    var constraints = {
+        audio: false,
+        video: true
+    };
 
-var video = document.querySelector('#videoEl');
-var error = document.querySelector('#errorEl');
+    var video = document.querySelector('#videoEl');
+    var error = document.querySelector('#errorEl');
 
-navigator.mediaDevices.getUserMedia()
-    .then(function(stream) {
+    function onStream(stream) {
         var videoTracks = stream.getVideoTracks();
         console.log('Get media:', constraints);
         console.log('Video device:', videoTracks[0].label);
@@ -17,8 +17,9 @@ navigator.mediaDevices.getUserMedia()
 
         video.srcObject = videoTracks;
         window.stream = stream;
-    })
-    .catch(function(err) {
+    }
+
+    function onError(err) {
         switch (err.name) {
             case 'PermissionDeniedError':
                 errorMessage('Permissions denied!', err);
@@ -29,12 +30,20 @@ navigator.mediaDevices.getUserMedia()
             default:
                 errorMessage('An error occurred!');
         }
-    });
-
-
-function errorMessage(message, err) {
-    error.innerHTML += '<p>' + message + '</p>';
-    if (err) {
-        console.error('Error occurred:', err);
     }
-}
+function errorMessage(message, err) {
+        error.innerHTML += '<p>' + message + '</p>';
+        if (err) {
+            console.error('Error occurred:', err);
+        }
+    }
+    if (getUserMedia) {
+        getUserMedia(constraints, onStream, onError);
+    } else {
+    	errorMessage('getUserMedia API not available');
+    }
+
+
+    
+
+})(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;);
