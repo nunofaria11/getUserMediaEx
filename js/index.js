@@ -3,11 +3,9 @@
     navigator._getUserMedia = getUserMedia;
 
     var constraints = {
-        audio: false,
+        audio: true,
         video: true
     };
-
-
 
     var video = document.querySelector('#videoEl');
     var error = document.querySelector('#errorEl');
@@ -19,7 +17,7 @@
         stream.onended = function() {
             console.log('Stream ended!');
         };
-        video.src = window.URL.createObjectURL(stream);
+        video.srcObject = stream;
         video.onloadedmetadata = function(e) {
             video.play();
         };
